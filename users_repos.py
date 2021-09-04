@@ -71,6 +71,6 @@ def get_user(user_id: int) -> UserInfo:
 def create_user(user_id: int) -> UserInfo:
     cursor = connection.cursor()
     cursor.execute(f"INSERT INTO users(type, user_id) VALUES ('user', {user_id})")
-    cursor.close()
     connection.commit()
+    cursor.close()
     return get_user(user_id)

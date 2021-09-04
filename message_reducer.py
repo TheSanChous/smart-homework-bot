@@ -10,12 +10,6 @@ async def not_found_command(message: types.Message):
     await message.answer(strings["command_not_found"])
 
 
-async def register_user_message(user: UserInfo, message: types.Message):
-    if user.is_registered is True:
-        return
-    await message.answer(strings["user_not_registered"], reply_markup=get_register_keyboard())
-
-
 async def start_command(user: UserInfo, message: types.Message):
     if user is None:
         # user = users_repos.create_user(message.from_user.id)
@@ -44,15 +38,11 @@ command_list = {
 }
 
 
-async def reduce(message: types.Message):
-    user = users_repos.get_user(message.from_user.id)
-    print(user.state)
-    if user.is_registered is False and user.state is None:
-        await register_user_message(user, message)
-    elif message.is_command():
-        await command_reducer(user, message.text, message)
-    elif user.state is not None or user.state is not "":
+async def reduce(user: UserInfo, message: types.Message):
+    if user.state is not None:
         spl = user.state.split(" ")
         if len(spl) >= 1:
             if spl[0] == "registration":
-                await register_user(user, message)
+                await register_user(message)
+    elif message.is_command():
+        await command_reducer(user, message.text, message)
