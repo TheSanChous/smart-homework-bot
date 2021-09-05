@@ -44,8 +44,6 @@ async def reduce_registration_state(registration_state: str, message: Message, u
         user.set_registered(True)
 
 
-
-
 async def reduce_message_with_state(message: Message, user: UserInfo):
     if message.is_command():
         await message.answer("Сначала, закончите с вопросом выше")

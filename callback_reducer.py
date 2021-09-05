@@ -20,7 +20,7 @@ async def reduce_registration_callback(registration_state: str, call: types.Call
     if registration_state == "join_or_create_group":
         if call.data == "join_group":
             await call.message.answer(strings["enter_group_code"])
-            user.set_state("enter_group_code")
+            user.set_state("registration:enter_group_code")
         elif call.data == "create_group":
             await call.message.answer("2")
 
