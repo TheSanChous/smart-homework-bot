@@ -1,5 +1,5 @@
 from database_context import connection
-
+from group_repos import GroupInfo
 user_types = [
     "teacher",
     "student"
@@ -13,13 +13,15 @@ class UserInfo:
                  is_registered: bool,
                  first_name: str,
                  last_name: str,
-                 state: str):
+                 state: str,
+                 group_id: int):
         self.user_id = user_id
         self.type = user_type
         self.is_registered = is_registered
         self.first_name = first_name
         self.last_name = last_name
         self.state = state
+        self.group_id = group_id
         pass
 
     def set_type(self, user_type: str):
@@ -61,6 +63,13 @@ class UserInfo:
         connection.commit()
         pass
 
+    def set_group(self, group: GroupInfo):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE users SET group_id = '{group.group_id}' WHERE user_id = {self.user_id}")
+        connection.commit()
+        self.group_id = group.group_id
+        pass
+
 
 def get_user(user_id: int) -> UserInfo:
     cursor = connection.cursor()
@@ -69,7 +78,7 @@ def get_user(user_id: int) -> UserInfo:
     cursor.close()
     if user is None:
         return create_user(user_id)
-    user_info = UserInfo(user[2], user[1], user[3], user[4], user[5], user[6])
+    user_info = UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], user[7])
     return user_info
 
 

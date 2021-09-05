@@ -3,11 +3,13 @@ from users_repos import user_types
 from strings import strings
 
 
-def get_user_type_switch_keyboard():
+def get_user_type_switch_keyboard(selected: str = None):
     keyboard = types.InlineKeyboardMarkup(2)
-    for user_type in user_types:
-        button = types.InlineKeyboardButton(text=strings[user_type], callback_data=user_type)
-        keyboard.add(button)
+    student_button = types.InlineKeyboardButton(text=strings["student"] + (" ✅" if selected == "student" else ""),
+                                                callback_data="student")
+    teacher_button = types.InlineKeyboardButton(text=strings["teacher"] + (" ✅" if selected == "teacher" else ""),
+                                                callback_data="teacher")
+    keyboard.add(student_button, teacher_button)
     return keyboard
 
 

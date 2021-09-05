@@ -1,6 +1,7 @@
 from aiogram import Bot
 from aiogram.types import *
 from users_repos import *
+from group_repos import *
 import users_repos
 from strings import strings
 from callback_buttons import *
@@ -23,22 +24,37 @@ async def command_reducer(message: Message, user: UserInfo):
     pass
 
 
+async def reduce_registration_state(registration_state: str, message: Message, user: UserInfo):
+    if registration_state == "enter_first_name":
+        user.set_first_name(message.text)
+        await message.answer(strings["enter_last_name"])
+        user.set_state("registration:enter_last_name")
+    if registration_state == "enter_last_name":
+        user.set_last_name(message.text)
+        await message.answer(strings["enter_user_type"], reply_markup=get_user_type_switch_keyboard())
+        user.set_state("registration:user_type")
+    if registration_state == "enter_group_code":
+        group = get_group(message.text)
+        if group is None:
+            await message.answer(strings["incorrect_group_id"])
+            return
+        user.set_group(group)
+        await message.answer(strings["successful_join_to_group"].format(group_name=group.name))
+        user.set_state(None)
+        user.set_registered(True)
+
+
+
+
 async def reduce_message_with_state(message: Message, user: UserInfo):
     if message.is_command():
         await message.answer("Сначала, закончите с вопросом выше")
         return
     spl = user.state.split(":")
     state = spl[0]
-    args = spl[1:]
+    args = spl[1]
     if state == "registration":
-        if args[0] == "enter_first_name":
-            user.set_first_name(message.text)
-            await message.answer(strings["enter_last_name"])
-            user.set_state("registration:enter_last_name")
-        if args[0] == "enter_last_name":
-            user.set_last_name(message.text)
-            await message.answer(strings["enter_user_type"], reply_markup=get_user_type_switch_keyboard())
-            user.set_state("registration:user_type")
+        await reduce_registration_state(args, message, user)
     pass
 
 
