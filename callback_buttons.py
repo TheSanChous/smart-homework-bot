@@ -13,9 +13,11 @@ def get_user_type_switch_keyboard(selected: str = None):
     return keyboard
 
 
-def get_join_or_create_group_keyboard():
+def get_join_or_create_group_keyboard(selected: str = None):
     keyboard = types.InlineKeyboardMarkup(2)
-    create_button = types.InlineKeyboardButton(text=strings["create_group"], callback_data="create_group")
-    join_button = types.InlineKeyboardButton(text=strings["join_group"], callback_data="join_group")
+    create_button = types.InlineKeyboardButton(text=strings["create_group"] + (" ✅" if selected == "create" else "")
+                                               , callback_data="create_group")
+    join_button = types.InlineKeyboardButton(text=strings["join_group"] + (" ✅" if selected == "join" else "")
+                                             , callback_data="join_group")
     keyboard.add(create_button, join_button)
     return keyboard

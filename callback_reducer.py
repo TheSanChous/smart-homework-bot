@@ -19,10 +19,11 @@ async def reduce_registration_callback(registration_state: str, call: types.Call
             user.set_state("registration:join_or_create_group")
     if registration_state == "join_or_create_group":
         if call.data == "join_group":
+            await call.message.edit_reply_markup(get_join_or_create_group_keyboard("join"))
             await call.message.answer(strings["enter_group_code"])
             user.set_state("registration:enter_group_code")
         elif call.data == "create_group":
-            await call.message.answer("2")
+            await call.message.edit_reply_markup(get_join_or_create_group_keyboard("create"))
 
 
 async def reduce_callback_with_state(call: types.CallbackQuery, user: UserInfo):
