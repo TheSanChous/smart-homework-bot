@@ -1,5 +1,10 @@
 from database_context import connection
 
+user_types = [
+    "teacher",
+    "student"
+]
+
 
 class UserInfo:
     def __init__(self,
@@ -63,7 +68,7 @@ def get_user(user_id: int) -> UserInfo:
     user = cursor.fetchone()
     cursor.close()
     if user is None:
-        return None
+        return create_user(user_id)
     user_info = UserInfo(user[2], user[1], user[3], user[4], user[5], user[6])
     return user_info
 

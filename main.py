@@ -10,15 +10,13 @@ dp = Dispatcher(bot)
 
 @dp.message_handler()
 async def message_handler(message: types.Message):
-    user = await check_register_user(message)
-    if user is None:
-        return
-    await reduce(user, message)
+    await reduce_text_message(message)
 
 
 @dp.callback_query_handler(lambda callback_query: True)
 async def callback_handler(callback_query: types.CallbackQuery):
     await reduce_callback(callback_query)
 
+
 if __name__ == "__main__":
-    executor.start_polling(dp, skip_updates=False)
+    executor.start_polling(dp, skip_updates=True)

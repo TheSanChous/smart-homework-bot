@@ -2,17 +2,17 @@ strings = {
     "welcome_new_user":     "Здравствуйте!\nДавайте начнем работу:/help",
     "welcome_user":         "Вы уже запускали бота.",
     "command_not_found":    "Не могу вас понять. Попробуйте еще раз прочтитать /help.",
+    "input_error":          "Что-то не правильно... Попробуйте еще раз, пожалйста!",
     "user_not_registered":  "Вы еще не зарегестрированы. Нажмите на кнопку ниже, чтобы начать регистрацию:",
     "user_registered":      "Вы уже зарегистрированы",
     "enter_first_name":     "Введите ваше имя",
     "enter_last_name":      "Введите вашу фамилию",
-    "register_successful":  "Спасибо! Вы успешно зарегистрировались."
-}
-
-buttons = {
-    "register": {
-        "text": "Зарегистрироватся",
-        "data": "start_register",
-        "disable": "retry_register"
-    }
+    "enter_group_code":     "Введите код вашего класса или группы:",
+    "enter_user_type":      "Кто вы?",
+    "join_or_create_group": "Вы хотите создать группу или присоединится к существующей?",
+    "create_group":         "Создать группу",
+    "join_group":           "Присоеденится",
+    "register_successful":  "Спасибо! Вы успешно зарегистрировались.",
+    "teacher":              "Я Учитель",
+    "student":              "Я Ученик"
 }

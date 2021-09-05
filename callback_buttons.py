@@ -1,12 +1,19 @@
 from aiogram import types
-from strings import buttons
+from users_repos import user_types
+from strings import strings
 
 
-def get_register_keyboard(enable: bool = True):
-    keyboard = types.InlineKeyboardMarkup(1)
-    button = buttons["register"]
-    register_button = types.InlineKeyboardButton(text=button["text"], callback_data=button["data"])
-    if not enable:
-        register_button.callback_data = button["disable"]
-    keyboard.add(register_button)
+def get_user_type_switch_keyboard():
+    keyboard = types.InlineKeyboardMarkup(2)
+    for user_type in user_types:
+        button = types.InlineKeyboardButton(text=strings[user_type], callback_data=user_type)
+        keyboard.add(button)
+    return keyboard
+
+
+def get_join_or_create_group_keyboard():
+    keyboard = types.InlineKeyboardMarkup(2)
+    create_button = types.InlineKeyboardButton(text=strings["create_group"], callback_data="create_group")
+    join_button = types.InlineKeyboardButton(text=strings["join_group"], callback_data="join_group")
+    keyboard.add(create_button, join_button)
     return keyboard
