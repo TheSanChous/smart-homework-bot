@@ -17,6 +17,16 @@ def get_groups(user_id: int) -> list:
     return groups
 
 
+def get_subjects(group_id: int):
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * FROM subject WHERE group_id = {group_id}")
+    results = cursor.fetchall()
+    subjects = []
+    for result in results:
+        subjects.append(Subjects.SubjectInfo(result[0], result[1], result[2], result[3]))
+    return subjects
+
+
 def get_user(user_id: int) -> Users.UserInfo:
     cursor = connection.cursor()
     cursor.execute(f"SELECT * FROM users WHERE user_id = {user_id}")
@@ -84,7 +94,7 @@ def get_group(group_id: int) -> Groups.GroupInfo:
     result = cursor.fetchone()
     if result is None:
         return None
-    group = Groups.GroupInfo(name=result[0], group_id=result[1])
+    group = Groups.GroupInfo(name=result[0], group_id=result[1], subjects=get_subjects(group_id))
     return group
 
 
@@ -94,5 +104,5 @@ def get_group_by_name(group_name: str) -> Groups.GroupInfo:
     result = cursor.fetchone()
     if result is None:
         return None
-    group = Groups.GroupInfo(result[0], result[1])
+    group = Groups.GroupInfo(result[0], result[1], get_subjects(result[1]))
     return group

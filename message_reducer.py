@@ -1,9 +1,11 @@
 from aiogram import types
+from strings import text_commands
 from scripts.registration import *
 from scripts.group_create import *
 from scripts.add_subject_to_group import *
 from scripts.send_menu import *
 from scripts.send_help import *
+from scripts.add_homework import *
 
 
 async def command_reducer(message: types.Message, user: Users.UserInfo):
@@ -24,22 +26,26 @@ async def reduce_message_with_state(message: types.Message, user: Users.UserInfo
     args = spl[1]
     if state == "registration":
         await reduce_registration_state(args, message, user)
-    if state == "group_create":
+    elif state == "group_create":
         await reduce_group_create_state(args, message, user)
-    if state == "add_subject_to_group":
+    elif state == "add_subject_to_group":
         await reduce_add_subject_to_group_state(args, message, user)
+    elif state == "add_homework":
+        await reduce_add_homework_state(args, message, user)
     pass
 
 
 async def reduce_text(message: types.Message, user: Users.UserInfo):
-    if message.text.lower() in ["меню"]:
+    if message.text.lower() in text_commands["menu"]:
         await send_menu(message, user)
-    elif message.text.lower() in ["о боте ❓", "о боте", "помощь"]:
+    elif message.text.lower() in text_commands["help"]:
         await send_help(message, user)
-    elif message.text.lower() in ["создать новую группу 📔", "создать новую группу", "создать группу"]:
+    elif message.text.lower() in text_commands["create_group"]:
         await group_create(message, user)
-    elif message.text.lower() in ["добавить предмет в группу", "добавить предмет в группу ➕", "добавть предмет"]:
+    elif message.text.lower() in text_commands["add_subject_to_group"]:
         await add_subject_to_group(message, user)
+    elif message.text.lower() in text_commands["add_homework"]:
+        await add_homework(message, user)
     else:
         pass
 

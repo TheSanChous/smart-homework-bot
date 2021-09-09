@@ -1,7 +1,13 @@
 from aiogram import types
+
+from scripts.group_create import group_create
+from scripts.join_group import join_group
 from strings import strings
+
 from db import *
-from callback_buttons import get_menu_keyboard, get_user_type_switch_keyboard
+
+from callback_buttons import get_menu_keyboard, get_user_type_switch_keyboard, get_join_or_create_group_keyboard, \
+    get_user_groups_keyboard, get_enter_subject_description_cancel_keyboard
 
 
 async def try_register_user(message: types.Message):
@@ -33,3 +39,25 @@ async def reduce_registration_state(registration_state: str, message: types.Mess
                              reply_markup=get_menu_keyboard(user.type))
         user.set_state(None)
         user.set_registered(True)
+
+
+async def reduce_registration_callback(registration_state: str, call: types.CallbackQuery, user: Users.UserInfo):
+    if registration_state == "user_type":
+        user.set_type(call.data)
+        if user.type == "student":
+            await call.message.edit_reply_markup(get_user_type_switch_keyboard("student"))
+            await call.message.answer(strings["enter_group_code"])
+            user.set_state("registration:enter_group_code")
+        elif user.type == "teacher":
+            await call.message.edit_reply_markup(get_user_type_switch_keyboard("teacher"))
+            await call.message.answer(strings["join_or_create_group"],
+                                      reply_markup=get_join_or_create_group_keyboard())
+            user.set_state("registration:join_or_create_group")
+    if registration_state == "join_or_create_group":
+        if call.data == "join_group":
+            await call.message.edit_reply_markup(get_join_or_create_group_keyboard("join"))
+            await join_group(call.message, user)
+        elif call.data == "create_group":
+            await call.message.edit_reply_markup(get_join_or_create_group_keyboard("create"))
+            await group_create(call.message, user)
+

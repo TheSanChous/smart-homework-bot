@@ -1,4 +1,6 @@
 from aiogram import types
+
+from db import Subjects
 from db.Users import UserInfo
 from db.Groups import GroupInfo
 from strings import strings
@@ -65,4 +67,12 @@ def get_enter_subject_description_cancel_keyboard(selected: bool = False):
     cancel_button = types.InlineKeyboardButton("Пропустить ✅" if selected else "Пропустить",
                                                callback_data="cancel_enter_subject_description")
     keyboard.add(cancel_button)
+    return keyboard
+
+
+def get_group_subjects_switch_keyboard(group: GroupInfo, selected_id: int = None):
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    for subject in group.subjects:
+        keyboard.add(types.InlineKeyboardButton(subject.name + (" ✅" if selected_id == group.group_id else ""),
+                                                callback_data=str(subject.subject_id)))
     return keyboard
