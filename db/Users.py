@@ -1,9 +1,5 @@
 from database_context import connection
-from group_repos import GroupInfo
-user_types = [
-    "teacher",
-    "student"
-]
+from db import Groups, Subjects
 
 
 class UserInfo:
@@ -14,14 +10,18 @@ class UserInfo:
                  first_name: str,
                  last_name: str,
                  state: str,
-                 group_id: int):
+                 groups: list,
+                 selected_group: Groups.GroupInfo,
+                 selected_subject: Subjects.SubjectInfo):
         self.user_id = user_id
         self.type = user_type
         self.is_registered = is_registered
         self.first_name = first_name
         self.last_name = last_name
         self.state = state
-        self.group_id = group_id
+        self.groups = groups
+        self.selected_group = selected_group
+        self.selected_subject = selected_subject
         pass
 
     def set_type(self, user_type: str):
@@ -63,28 +63,22 @@ class UserInfo:
         connection.commit()
         pass
 
-    def set_group(self, group: GroupInfo):
+    def add_group(self, group: Groups.GroupInfo):
         cursor = connection.cursor()
-        cursor.execute(f"UPDATE users SET group_id = '{group.group_id}' WHERE user_id = {self.user_id}")
+        cursor.execute(f"INSERT INTO users_groups(user_id, group_id) VALUES('{self.user_id}', {group.group_id})")
         connection.commit()
-        self.group_id = group.group_id
+        self.groups.append(group)
         pass
 
+    def set_selected_group(self, group: Groups.GroupInfo):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE users SET selected_group_id = {group.group_id if group is not None else 'NULL'} WHERE user_id = {self.user_id}")
+        connection.commit()
+        self.selected_group = group
+        pass
 
-def get_user(user_id: int) -> UserInfo:
-    cursor = connection.cursor()
-    cursor.execute(f"SELECT * FROM users WHERE user_id = {user_id}")
-    user = cursor.fetchone()
-    cursor.close()
-    if user is None:
-        return create_user(user_id)
-    user_info = UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], user[7])
-    return user_info
-
-
-def create_user(user_id: int) -> UserInfo:
-    cursor = connection.cursor()
-    cursor.execute(f"INSERT INTO users(type, user_id) VALUES ('user', {user_id})")
-    connection.commit()
-    cursor.close()
-    return get_user(user_id)
+    def set_selected_subject(self, subject: Subjects.SubjectInfo):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE users SET selected_subject_id = {subject.subject_id if subject is not None else 'NULL'} WHERE user_id = {self.user_id}")
+        connection.commit()
+        self.selected_subject = subject

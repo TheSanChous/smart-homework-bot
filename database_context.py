@@ -1,6 +1,6 @@
 import psycopg2
 import os
-
+import sys
 
 connection = psycopg2.connect(dbname='d40blfu5hq3mdk',
                                user='aquljnybflueun',

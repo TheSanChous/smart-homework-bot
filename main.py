@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, executor, types
-from message_reducer import *
-from callback_reducer import *
+from message_reducer import reduce_text_message
+from callback_reducer import reduce_callback
 import os
 
 
