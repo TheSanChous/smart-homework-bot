@@ -32,8 +32,8 @@ async def reduce_add_homework_state_callback(state: str, call: types.CallbackQue
     if state == "select_group":
         await call.message.edit_reply_markup(get_user_groups_keyboard(user, selected=call.data))
         if call.data == "cancel":
-            user.clear_selected()
             await call.message.answer("Добавление задания отменено.")
+            user.clear_selected()
             return
         group = get_group(int(call.data))
         if group is None:

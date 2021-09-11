@@ -9,15 +9,21 @@ from scripts.add_homework import *
 
 
 async def command_reducer(message: types.Message, user: Users.UserInfo):
-    command = message.text[1:]
+    command = message.text[1:].lower()
     if command == "start":
         await try_register_user(message)
     elif command == "menu":
         await send_menu(message, user)
+    elif command == "create_group":
+        await group_create(message, user)
     elif command == "add_homework":
         await add_homework(message, user)
     elif command == "add_subject":
         await add_subject_to_group(message, user)
+    elif command == "help":
+        await send_help(message, user)
+    elif command == "about":
+        await send_help(message, user)
     pass
 
 
