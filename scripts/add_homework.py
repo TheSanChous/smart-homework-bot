@@ -1,7 +1,7 @@
 from aiogram import types
 from strings import strings
 from callback_buttons import get_user_groups_keyboard, get_group_subjects_switch_keyboard, \
-    get_add_homework_types_keyboard, get_teacher_menu_keyboard
+    get_add_homework_types_keyboard
 from db import *
 
 
