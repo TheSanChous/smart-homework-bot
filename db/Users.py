@@ -1,5 +1,5 @@
 from database_context import connection
-from db import Groups, Subjects
+from db import Groups, Subjects, Homeworks
 
 
 class UserInfo:
@@ -12,7 +12,8 @@ class UserInfo:
                  state: str,
                  groups: list,
                  selected_group: Groups.GroupInfo,
-                 selected_subject: Subjects.SubjectInfo):
+                 selected_subject: Subjects.SubjectInfo,
+                 selected_homework: Homeworks.HomeworkInfo):
         self.user_id = user_id
         self.type = user_type
         self.is_registered = is_registered
@@ -22,6 +23,7 @@ class UserInfo:
         self.groups = groups
         self.selected_group = selected_group
         self.selected_subject = selected_subject
+        self.selected_homework = selected_homework
         pass
 
     def set_type(self, user_type: str):
@@ -59,7 +61,7 @@ class UserInfo:
             state = 'null'
         else:
             state = f"'{state}'"
-        cursor.execute(f"UPDATE users SET state = {state} WHERE user_id = {self.user_id}")
+        cursor.execute(f"UPDATE users SET state = {state if state is not None else 'NULL'} WHERE user_id = {self.user_id}")
         connection.commit()
         pass
 
@@ -82,3 +84,17 @@ class UserInfo:
         cursor.execute(f"UPDATE users SET selected_subject_id = {subject.subject_id if subject is not None else 'NULL'} WHERE user_id = {self.user_id}")
         connection.commit()
         self.selected_subject = subject
+
+    def set_selected_homework(self, homework: Homeworks.HomeworkInfo):
+        cursor = connection.cursor()
+        cursor.execute(f"UPDATE users SET selected_homework_id = {homework.homework_id if homework is not None else 'NULL'} WHERE user_id = {self.user_id}")
+        connection.commit()
+        self.selected_homework = homework
+
+    def clear_selected(self, clear_state: bool = True):
+        self.set_selected_group(None)
+        self.set_selected_subject(None)
+        self.set_selected_homework(None)
+        if clear_state:
+            self.set_state(None)
+        pass

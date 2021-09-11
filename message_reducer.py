@@ -14,6 +14,10 @@ async def command_reducer(message: types.Message, user: Users.UserInfo):
         await try_register_user(message)
     elif command == "menu":
         await send_menu(message, user)
+    elif command == "add_homework":
+        await add_homework(message, user)
+    elif command == "add_subject":
+        await add_subject_to_group(message, user)
     pass
 
 
@@ -23,7 +27,7 @@ async def reduce_message_with_state(message: types.Message, user: Users.UserInfo
         return
     spl = user.state.split(":")
     state = spl[0]
-    args = spl[1]
+    args = ':'.join(spl[1:])
     if state == "registration":
         await reduce_registration_state(args, message, user)
     elif state == "group_create":

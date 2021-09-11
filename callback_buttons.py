@@ -3,6 +3,7 @@ from aiogram import types
 from db import Subjects
 from db.Users import UserInfo
 from db.Groups import GroupInfo
+from db.Homeworks import HomeworkInfo
 from strings import strings
 
 
@@ -59,6 +60,7 @@ def get_user_groups_keyboard(user: UserInfo, selected: str = None):
         group_button = types.InlineKeyboardButton(group.name + (" ✅" if selected == str(group.group_id) else "")
                                                   , callback_data=f"{group.group_id}")
         keyboard.add(group_button)
+    keyboard.add(types.InlineKeyboardButton("Отменить" + (" ✅" if selected == "cancel" else ""), callback_data="cancel"))
     return keyboard
 
 
@@ -73,6 +75,24 @@ def get_enter_subject_description_cancel_keyboard(selected: bool = False):
 def get_group_subjects_switch_keyboard(group: GroupInfo, selected_id: int = None):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     for subject in group.subjects:
-        keyboard.add(types.InlineKeyboardButton(subject.name + (" ✅" if selected_id == group.group_id else ""),
+        keyboard.add(types.InlineKeyboardButton(subject.name + (" ✅" if selected_id == subject.subject_id else ""),
                                                 callback_data=str(subject.subject_id)))
+    keyboard.add(types.InlineKeyboardButton("Отменить" + (" ✅" if selected_id == -1 else ""), callback_data="cancel"))
+    return keyboard
+
+
+def get_add_homework_types_keyboard(selected: list, complete: bool = False, homework: HomeworkInfo = None):
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    add_photo_button = types.InlineKeyboardButton("Прикрепить фото" + (" ✅" if "photo" in selected else ""),
+                                                  callback_data="photo")
+    add_text_button = types.InlineKeyboardButton("Добавить текстовое сообщение" + (" ✅" if "text" in selected else ""),
+                                                 callback_data="text")
+    add_file_button = types.InlineKeyboardButton("Прикрепить файл" + (" ✅" if "file" in selected else ""),
+                                                 callback_data="file")
+    cancel_button = types.InlineKeyboardButton("Отменить" + (" ✅" if "cancel" in selected else ""),
+                                               callback_data="cancel")
+    keyboard.add(add_text_button, cancel_button)
+    if complete:
+        keyboard.add(types.InlineKeyboardButton("Готово!" + (" ✅" if "submit" in selected else ""),
+                                                callback_data="submit"))
     return keyboard

@@ -1,6 +1,7 @@
 from . import Subjects
 from . import Users
 from . import Groups
+from . import Homeworks
 from database_context import connection
 import random
 
@@ -19,7 +20,7 @@ def get_groups(user_id: int) -> list:
 
 def get_subjects(group_id: int):
     cursor = connection.cursor()
-    cursor.execute(f"SELECT * FROM subject WHERE group_id = {group_id}")
+    cursor.execute(f"SELECT * FROM subjects WHERE group_id = {group_id}")
     results = cursor.fetchall()
     subjects = []
     for result in results:
@@ -34,7 +35,7 @@ def get_user(user_id: int) -> Users.UserInfo:
     cursor.close()
     if user is None:
         return create_user(user_id)
-    user_info = Users.UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], get_groups(user[2]), get_group(user[7]), get_subject(user[8]))
+    user_info = Users.UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], get_groups(user[2]), get_group(user[7]), get_subject(user[8]), get_homework(user[9]))
     return user_info
 
 
@@ -78,7 +79,8 @@ def generate_group_id() -> int:
 
 
 def create_group(name: str):
-    group = Groups.GroupInfo(name, generate_group_id())
+    group_id = generate_group_id()
+    group = Groups.GroupInfo(name, group_id, get_subjects(group_id))
     cursor = connection.cursor()
     cursor.execute(f"INSERT INTO groups(name, group_id) VALUES ('{group.name}', {group.group_id})")
     connection.commit()
@@ -106,3 +108,25 @@ def get_group_by_name(group_name: str) -> Groups.GroupInfo:
         return None
     group = Groups.GroupInfo(result[0], result[1], get_subjects(result[1]))
     return group
+
+
+def create_homework(subject: Subjects.SubjectInfo, description: str):
+    cursor = connection.cursor()
+    cursor.execute(f"INSERT INTO homeworks(subject_id, description) VALUES ({subject.subject_id}, '{description}');"
+                   "SELECT MAX(id) as id FROM homeworks LIMIT 1;")
+    homework_id = cursor.fetchone()[0]
+    connection.commit()
+    cursor.close()
+    return Homeworks.HomeworkInfo(homework_id=homework_id, subject_id=subject.subject_id, description=description)
+
+
+def get_homework(homework_id: int) -> Homeworks.HomeworkInfo:
+    if homework_id is None:
+        return None
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT * FROM homeworks WHERE id = {homework_id}")
+    result = cursor.fetchone()
+    if result is None:
+        return None
+    homework = Homeworks.HomeworkInfo(homework_id=result[0], subject_id=result[1], description=result[2])
+    return homework
