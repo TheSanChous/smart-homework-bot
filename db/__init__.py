@@ -6,6 +6,17 @@ from database_context import connection
 import random
 
 
+def get_group_students_id(group: Groups.GroupInfo) -> list:
+    cursor = connection.cursor()
+    cursor.execute(f"SELECT user_id FROM users_groups WHERE group_id = {group.group_id}")
+    users = []
+    for user in cursor.fetchall():
+        user = get_user(user[0])
+        if user.type == "student":
+            users.append(user)
+    return users
+
+
 def get_groups(user_id: int) -> list:
     cursor = connection.cursor()
     cursor.execute(f"SELECT group_id FROM users_groups WHERE user_id = {user_id}")

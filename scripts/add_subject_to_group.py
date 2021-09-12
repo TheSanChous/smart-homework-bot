@@ -30,23 +30,11 @@ async def reduce_add_subject_to_group_state(add_subject_to_group_state: str, mes
 
 
 async def reduce_add_subject_to_group_state_callback(args: str, call: types.CallbackQuery, user: Users.UserInfo):
-    if args == "group_switch":
-        group = get_group(call.data)
-        if group is None:
-            await call.message.answer("Ошибка, группа не найдена.")
-            return
+    if call.data == "cancel":
         await call.message.edit_reply_markup(get_user_groups_keyboard(user, selected=call.data))
-        await call.message.answer(strings["enter_subject_name"])
-        user.set_selected_group(group)
-        user.set_state("add_subject_to_group:enter_subject_name")
-    if args == "enter_subject_description":
-        if call.data == "cancel_enter_subject_description":
-            await call.message.edit_reply_markup(get_enter_subject_description_cancel_keyboard(True))
-            await call.message.answer(strings["subject_added_successful"])
-            user.set_state(None)
-
-
-async def reduce_add_subject_to_group_state_callback(args: str, call: types.CallbackQuery, user: Users.UserInfo):
+        await call.message.answer("Добавление предмета отменено.")
+        user.set_state(None)
+        return
     if args == "group_switch":
         group = get_group(call.data)
         if group is None:

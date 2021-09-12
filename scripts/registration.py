@@ -6,8 +6,7 @@ from strings import strings
 
 from db import *
 
-from callback_buttons import get_menu_keyboard, get_user_type_switch_keyboard, get_join_or_create_group_keyboard, \
-    get_user_groups_keyboard, get_enter_subject_description_cancel_keyboard
+from callback_buttons import get_menu_keyboard, get_user_type_switch_keyboard, get_join_or_create_group_keyboard
 
 
 async def try_register_user(message: types.Message):
