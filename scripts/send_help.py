@@ -1,5 +1,5 @@
 from aiogram import types
-from strings import strings
+from resources.strings import strings
 from db import *
 
 

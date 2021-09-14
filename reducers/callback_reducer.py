@@ -1,6 +1,4 @@
-from scripts.add_subject_to_group import *
-from scripts.registration import *
-from scripts.add_homework import *
+from scripts import *
 
 
 async def reduce_callback_with_state(call: types.CallbackQuery, user: Users.UserInfo):

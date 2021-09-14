@@ -1,6 +1,6 @@
 from aiogram import types, Bot
-from strings import strings
-from callback_buttons import get_user_groups_keyboard, get_group_subjects_switch_keyboard, \
+from resources.strings import strings
+from resources.keyboards import get_user_groups_keyboard, get_group_subjects_switch_keyboard, \
     get_add_homework_types_keyboard
 from db import *
 
@@ -8,7 +8,7 @@ from db import *
 async def send_homework(bot: Bot, user: Users.UserInfo):
     users = get_group_students_id(user.selected_group)
     for to_user in users:
-        await bot.send_message(to_user.user_id, f"Домашнее задание по предммету {user.selected_subject.name}: {user.selected_homework.description}")
+        await bot.send_message(to_user.user_id, f"Домашнее задание по предммету {user.selected_subject.name}:\n{user.selected_homework.description}")
 
 
 def get_user_selected_add_types(user: Users.UserInfo) -> list:

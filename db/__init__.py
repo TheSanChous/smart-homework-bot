@@ -2,8 +2,12 @@ from . import Subjects
 from . import Users
 from . import Groups
 from . import Homeworks
-from database_context import connection
+
+from .database_context import connection
 import random
+
+
+# DB Scripts:
 
 
 def get_group_students_id(group: Groups.GroupInfo) -> list:
@@ -46,7 +50,8 @@ def get_user(user_id: int) -> Users.UserInfo:
     cursor.close()
     if user is None:
         return create_user(user_id)
-    user_info = Users.UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], get_groups(user[2]), get_group(user[7]), get_subject(user[8]), get_homework(user[9]))
+    user_info = Users.UserInfo(user[2], user[1], user[3], user[4], user[5], user[6], get_groups(user[2]),
+                               get_group(user[7]), get_subject(user[8]), get_homework(user[9]))
     return user_info
 
 

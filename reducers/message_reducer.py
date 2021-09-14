@@ -1,10 +1,5 @@
-from strings import text_commands
-from scripts.registration import *
-from scripts.group_create import *
-from scripts.add_subject_to_group import *
-from scripts.send_menu import *
-from scripts.send_help import *
-from scripts.add_homework import *
+from resources.strings import text_commands
+from scripts import *
 
 
 async def command_reducer(message: types.Message, user: Users.UserInfo):

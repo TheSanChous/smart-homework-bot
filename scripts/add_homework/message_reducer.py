@@ -1,5 +1,5 @@
 from aiogram import types
-from callback_buttons import get_add_homework_types_keyboard
+from resources.keyboards import get_add_homework_types_keyboard
 from db import Users, create_homework
 from .callback_reducer import get_user_selected_add_types
 

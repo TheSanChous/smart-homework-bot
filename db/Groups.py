@@ -1,4 +1,4 @@
-from database_context import connection
+from db.database_context import connection
 
 
 class GroupInfo:

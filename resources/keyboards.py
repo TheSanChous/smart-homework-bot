@@ -1,10 +1,9 @@
 from aiogram import types
 
-from db import Subjects
 from db.Users import UserInfo
 from db.Groups import GroupInfo
 from db.Homeworks import HomeworkInfo
-from strings import strings
+from resources.strings import strings
 
 
 def get_user_type_switch_keyboard(selected: str = None):

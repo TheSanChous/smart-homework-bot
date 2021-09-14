@@ -1,7 +1,7 @@
 from aiogram import types
-from strings import strings
+from resources.strings import strings
 from db import *
-from callback_buttons import get_menu_keyboard
+from resources.keyboards import get_menu_keyboard
 
 
 async def send_menu(message: types.Message, user: Users.UserInfo):
