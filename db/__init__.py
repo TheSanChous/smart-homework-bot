@@ -5,7 +5,7 @@ from . import Homeworks
 
 from .database_context import connection
 import random
-
+from datetime import datetime
 
 # DB Scripts:
 
@@ -126,14 +126,14 @@ def get_group_by_name(group_name: str) -> Groups.GroupInfo:
     return group
 
 
-def create_homework(subject: Subjects.SubjectInfo, description: str):
+def create_homework(subject: Subjects.SubjectInfo, description: str, date: datetime = datetime.now):
     cursor = connection.cursor()
     cursor.execute(f"INSERT INTO homeworks(subject_id, description) VALUES ({subject.subject_id}, '{description}');"
                    "SELECT MAX(id) as id FROM homeworks LIMIT 1;")
     homework_id = cursor.fetchone()[0]
     connection.commit()
     cursor.close()
-    return Homeworks.HomeworkInfo(homework_id=homework_id, subject_id=subject.subject_id, description=description)
+    return Homeworks.HomeworkInfo(homework_id=homework_id, subject_id=subject.subject_id, description=description, date=date)
 
 
 def get_homework(homework_id: int) -> Homeworks.HomeworkInfo:
@@ -144,5 +144,5 @@ def get_homework(homework_id: int) -> Homeworks.HomeworkInfo:
     result = cursor.fetchone()
     if result is None:
         return None
-    homework = Homeworks.HomeworkInfo(homework_id=result[0], subject_id=result[1], description=result[2])
+    homework = Homeworks.HomeworkInfo(homework_id=result[0], subject_id=result[1], description=result[2], date=datetime.strptime(result[3], format="%Y-%m-%d"))
     return homework

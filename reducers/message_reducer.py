@@ -1,4 +1,5 @@
 from resources.strings import text_commands
+from resources.calendar import create_calendar
 from scripts import *
 
 
@@ -16,6 +17,8 @@ async def command_reducer(message: types.Message, user: Users.UserInfo):
         await teacher_command_reducer(message, user)
     elif user.type == "student":
         await student_command_reducer(message, user)
+    if command == "calendar":
+        await message.answer("dasd", reply_markup=create_calendar())
     pass
 
 
@@ -83,10 +86,7 @@ async def reduce_message_without_state(message: types.Message, user: Users.UserI
     if user.is_registered is False:
         await try_register_user(message)
     elif message.is_command():
-        if user.type == "teacher":
-            await teacher_command_reducer(message, user)
-        elif user.type == "student":
-            await student_command_reducer(message, user)
+        await command_reducer(message, user)
     else:
         await reduce_text(message, user)
     pass
