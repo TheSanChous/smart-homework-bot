@@ -1,8 +1,8 @@
-import dropbox
+from dropbox import *
 import os
 
 
-dbx = dropbox.Dropbox(os.getenv("STORAGE_API"))
+dbx = Dropbox(os.getenv("STORAGE_API"))
 dbx.users_get_current_account()
 
 
