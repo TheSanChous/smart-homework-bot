@@ -4,21 +4,22 @@ import calendar
 from .strings import month_names
 
 
-def create_callback_data(action,year,month,day):
-    return "calendar:"+";".join([action,str(year),str(month),str(day)])
+def create_callback_data(state, action,year,month,day):
+    return f"{state}:calendar:"+ (";".join([action,str(year),str(month),str(day)]))
 
 
 def separate_callback_data(data):
-    return data.split(":")[1].split(";")
+    spl = data.split(":")[-1].split(";")
+    return spl
 
 
-def create_calendar(year=None,month=None):
+def create_calendar(state: str, year=None,month=None):
     now = datetime.datetime.now()
     if year is None:
         year = now.year
     if month is None:
         month = now.month
-    data_ignore = create_callback_data("IGNORE", year, month, 0)
+    data_ignore = create_callback_data(state, "IGNORE", year, month, 0)
     keyboard = InlineKeyboardMarkup(row_width=1)
     # First row - Month and Year
     row = []
@@ -39,21 +40,21 @@ def create_calendar(year=None,month=None):
             elif day < now.day and month == now.month:
                 row.append(InlineKeyboardButton(" ", callback_data=data_ignore))
             else:
-                row.append(InlineKeyboardButton(str(day), callback_data=create_callback_data("DAY",year,month,day)))
+                row.append(InlineKeyboardButton(str(day), callback_data=create_callback_data(state, "DAY",year,month,day)))
         keyboard.row(*row)
     # Last row - Buttons
     row = []
     if now.month != month:
-        row.append(InlineKeyboardButton("<", callback_data=create_callback_data("PREV-MONTH", year, month, day)))
+        row.append(InlineKeyboardButton("<", callback_data=create_callback_data(state, "PREV-MONTH", year, month, day)))
     else:
         row.append(InlineKeyboardButton(" ", callback_data=data_ignore))
     row.append(InlineKeyboardButton(" ", callback_data=data_ignore))
-    row.append(InlineKeyboardButton(">", callback_data=create_callback_data("NEXT-MONTH", year, month, day)))
+    row.append(InlineKeyboardButton(">", callback_data=create_callback_data(state, "NEXT-MONTH", year, month, day)))
     keyboard.row(*row)
     return keyboard
 
 
-async def process_calendar_selection(callback_query: CallbackQuery):
+async def process_calendar_selection(state: str, callback_query: CallbackQuery):
     ret_data = (False,None)
     query = callback_query.data
     (action,year,month,day) = separate_callback_data(query)
@@ -65,10 +66,10 @@ async def process_calendar_selection(callback_query: CallbackQuery):
         ret_data = True, datetime.datetime(int(year),int(month),int(day))
     elif action == "PREV-MONTH":
         pre = curr - datetime.timedelta(days=1)
-        await callback_query.message.edit_reply_markup(reply_markup=create_calendar(int(pre.year),int(pre.month)))
+        await callback_query.message.edit_reply_markup(reply_markup=create_calendar(state, int(pre.year),int(pre.month)))
     elif action == "NEXT-MONTH":
         ne = curr + datetime.timedelta(days=31)
-        await callback_query.message.edit_reply_markup(reply_markup=create_calendar(int(ne.year),int(ne.month)))
+        await callback_query.message.edit_reply_markup(reply_markup=create_calendar(state, int(ne.year),int(ne.month)))
     else:
         await callback_query.answer()
         # UNKNOWN

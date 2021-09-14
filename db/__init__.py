@@ -128,7 +128,7 @@ def get_group_by_name(group_name: str) -> Groups.GroupInfo:
 
 def create_homework(subject: Subjects.SubjectInfo, description: str, date: datetime = datetime.now):
     cursor = connection.cursor()
-    cursor.execute(f"INSERT INTO homeworks(subject_id, description) VALUES ({subject.subject_id}, '{description}');"
+    cursor.execute(f"INSERT INTO homeworks(subject_id, description, date) VALUES ({subject.subject_id}, '{description}', '{date.year}-{date.month}-{date.day}');"
                    "SELECT MAX(id) as id FROM homeworks LIMIT 1;")
     homework_id = cursor.fetchone()[0]
     connection.commit()
@@ -144,5 +144,6 @@ def get_homework(homework_id: int) -> Homeworks.HomeworkInfo:
     result = cursor.fetchone()
     if result is None:
         return None
-    homework = Homeworks.HomeworkInfo(homework_id=result[0], subject_id=result[1], description=result[2], date=datetime.strptime(result[3], format="%Y-%m-%d"))
+    homework = Homeworks.HomeworkInfo(homework_id=result[0], subject_id=result[1], description=result[2],
+                                      date=result[3])
     return homework

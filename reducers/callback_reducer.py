@@ -19,11 +19,7 @@ async def reduce_callback_with_state(call: types.CallbackQuery, user: Users.User
 
 async def reduce_callback(call: types.CallbackQuery):
     user = get_user(call.from_user.id)
-    if call.data.split(":")[0] == "calendar":
-        is_day, selected_day = await process_calendar_selection(call)
-        if is_day:
-            print(selected_day)
-    elif user.state is not None:
+    if user.state is not None:
         await reduce_callback_with_state(call, user)
     else:
         await call.answer("Вы уже ответили на этот вопрос.")

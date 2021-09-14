@@ -5,7 +5,7 @@ from resources.strings import strings
 import os
 
 
-bot = Bot(os.getenv("TELEGRAM_API"))
+bot = Bot(os.getenv("TELEGRAM_API"),parse_mode=types.ParseMode.HTML)
 dp = Dispatcher(bot)
 
 DEBUG = False

@@ -2,6 +2,7 @@ from aiogram import types, Bot
 from resources.strings import strings
 from resources.keyboards import get_user_groups_keyboard, get_group_subjects_switch_keyboard, \
     get_add_homework_types_keyboard
+from resources.calendar import create_calendar, process_calendar_selection
 from db import *
 
 
@@ -52,9 +53,23 @@ async def reduce_add_homework_select_subject_state_callback(call: types.Callback
     await call.message.edit_reply_markup(
         get_group_subjects_switch_keyboard(user.selected_group, selected_id=subject.subject_id))
     user.set_selected_subject(subject)
-    await call.message.answer("Выберите один из вариантов ниже",
-                              reply_markup=get_add_homework_types_keyboard(selected=[]))
-    user.set_state("add_homework:add")
+    await call.message.answer("Выберите дату домашнего задания:",
+                              reply_markup=create_calendar("add_homework:select_date"))
+    user.set_state("add_homework:select_date")
+
+
+async def reduce_add_homework_select_date_state_callback(state: str, call: types.CallbackQuery, user: Users.UserInfo):
+    is_day, date = await process_calendar_selection("add_homework:select_date", call)
+    if is_day:
+        if user.selected_homework is None:
+            user.set_selected_homework(create_homework(user.selected_subject, "", date))
+        else:
+            user.selected_homework.set_date(date)
+        await call.message.edit_text(f"Выберите дату домашнего задания:\n<b>{date.day} - {date.month} - {date.year}</b>")
+        user.set_state("add_homework:add")
+        await call.message.answer("Выберите один из вариантов ниже",
+                                  reply_markup=get_add_homework_types_keyboard(selected=[]))
+    pass
 
 
 async def reduce_add_homework_add_state_callback(call: types.CallbackQuery, user: Users.UserInfo):
@@ -86,5 +101,7 @@ async def reduce_add_homework_state_callback(state: str, call: types.CallbackQue
         await reduce_add_homework_select_group_state_callback(call, user)
     elif state == "select_subject":
         await reduce_add_homework_select_subject_state_callback(call, user)
+    elif state == "select_date":
+        await reduce_add_homework_select_date_state_callback(state, call, user)
     elif state == "add":
         await reduce_add_homework_add_state_callback(call, user)

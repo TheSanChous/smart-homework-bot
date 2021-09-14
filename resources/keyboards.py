@@ -56,6 +56,8 @@ def get_user_groups_keyboard(user: UserInfo, selected: str = None):
     groups = user.groups
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     for group in groups:
+        if selected is not None and str(group.group_id) != selected:
+            continue
         group_button = types.InlineKeyboardButton(group.name + (" ✅" if selected == str(group.group_id) else "")
                                                   , callback_data=f"{group.group_id}")
         keyboard.add(group_button)
@@ -74,6 +76,8 @@ def get_enter_subject_description_cancel_keyboard(selected: bool = False):
 def get_group_subjects_switch_keyboard(group: GroupInfo, selected_id: int = None):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
     for subject in group.subjects:
+        if selected_id is not None and subject.subject_id != selected_id:
+            continue
         keyboard.add(types.InlineKeyboardButton(subject.name + (" ✅" if selected_id == subject.subject_id else ""),
                                                 callback_data=str(subject.subject_id)))
     keyboard.add(types.InlineKeyboardButton("Отменить" + (" ✅" if selected_id == -1 else ""), callback_data="cancel"))
