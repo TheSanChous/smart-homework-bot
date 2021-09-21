@@ -88,18 +88,18 @@ def get_group_subjects_switch_keyboard(group: GroupInfo, selected_id: int = None
     return keyboard
 
 
-def get_add_homework_types_keyboard(selected: list, complete: bool = False, homework: HomeworkInfo = None):
+def get_add_homework_types_keyboard(selected: str = None, complete: bool = False, homework: HomeworkInfo = None):
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    add_photo_button = types.InlineKeyboardButton("Прикрепить фото" + (" ✅" if "photo" in selected else ""),
+    add_photo_button = types.InlineKeyboardButton("Прикрепить фото" + (" ✅" if "photo" == selected else ""),
                                                   callback_data=KEYBOARD_OFF if selected else "photo")
-    add_text_button = types.InlineKeyboardButton("Добавить текстовое сообщение" + (" ✅" if "text" in selected else ""),
+    add_text_button = types.InlineKeyboardButton("Добавить текстовое сообщение" + (" ✅" if "text" == selected else ""),
                                                  callback_data=KEYBOARD_OFF if selected else "text")
-    add_file_button = types.InlineKeyboardButton("Прикрепить файл" + (" ✅" if "file" in selected else ""),
+    add_file_button = types.InlineKeyboardButton("Прикрепить файл" + (" ✅" if "file" == selected else ""),
                                                  callback_data=KEYBOARD_OFF if selected else "file")
-    cancel_button = types.InlineKeyboardButton("Отменить" + (" ✅" if "cancel" in selected else ""),
+    cancel_button = types.InlineKeyboardButton("Отменить" + (" ✅" if "cancel" == selected else ""),
                                                callback_data=KEYBOARD_OFF if selected else "cancel")
     keyboard.add(add_text_button, cancel_button)
     if complete:
-        keyboard.add(types.InlineKeyboardButton("Готово!" + (" ✅" if "submit" in selected else ""),
+        keyboard.add(types.InlineKeyboardButton("Готово!" + (" ✅" if "submit" == selected else ""),
                                                 callback_data=KEYBOARD_OFF if selected else "submit"))
     return keyboard
