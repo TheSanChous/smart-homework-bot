@@ -12,14 +12,6 @@ async def send_homework(bot: Bot, user: Users.UserInfo):
         await bot.send_message(to_user.user_id, f"Домашнее задание по предммету {user.selected_subject.name}:\n{user.selected_homework.description}")
 
 
-def get_user_selected_add_types(user: Users.UserInfo) -> list:
-    selected = list()
-    if user.selected_homework is not None:
-        if user.selected_homework.description is not None:
-            selected.append("text")
-    return selected
-
-
 async def reduce_add_homework_select_group_state_callback(call: types.CallbackQuery, user: Users.UserInfo):
     await call.message.edit_reply_markup(get_user_groups_keyboard(user, selected=call.data))
     if call.data == "cancel":
@@ -73,7 +65,7 @@ async def reduce_add_homework_select_date_state_callback(state: str, call: types
 
 
 async def reduce_add_homework_add_state_callback(call: types.CallbackQuery, user: Users.UserInfo):
-    selected = get_user_selected_add_types(user)
+    selected = call.data
     if call.data == "cancel":
         selected.append("cancel")
         await call.message.edit_reply_markup(get_add_homework_types_keyboard(selected=selected))
