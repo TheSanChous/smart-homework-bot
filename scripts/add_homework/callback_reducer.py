@@ -67,7 +67,6 @@ async def reduce_add_homework_select_date_state_callback(state: str, call: types
 async def reduce_add_homework_add_state_callback(call: types.CallbackQuery, user: Users.UserInfo):
     selected = call.data
     if call.data == "cancel":
-        selected.append("cancel")
         await call.message.edit_reply_markup(get_add_homework_types_keyboard(selected=selected))
         await call.message.answer("Добавление задания отменено.")
         if user.selected_homework is not None:
@@ -75,14 +74,12 @@ async def reduce_add_homework_add_state_callback(call: types.CallbackQuery, user
         user.clear_selected()
         return
     elif call.data == "submit":
-        selected.append("submit")
         await call.message.edit_reply_markup(get_add_homework_types_keyboard(selected=selected, complete=True))
         await call.message.answer("Задание добавлено!")
         await send_homework(call.bot, user)
         user.clear_selected()
         return
     selected_type = call.data
-    selected.append(selected_type)
     if selected_type == "text":
         await call.message.answer("Напишите ваше сообщение:")
         user.set_state("add_homework:add:text")
