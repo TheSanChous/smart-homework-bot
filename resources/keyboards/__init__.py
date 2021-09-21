@@ -1,2 +1,3 @@
-from .strings import *
 from .keyboards import *
+from .calendar import *
+

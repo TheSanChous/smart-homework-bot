@@ -36,7 +36,7 @@ async def reduce_add_subject_to_group_state_callback(args: str, call: types.Call
         await reduce_add_subject_to_group_cancel_state_callback(call, user)
         return
     elif args == "group_switch":
-        await  reduce_add_subject_to_group_group_switch_state_callback(call, user)
+        await reduce_add_subject_to_group_group_switch_state_callback(call, user)
     elif args == "enter_subject_description":
         await reduce_add_subject_to_group_enter_subject_description_state_callback(call, user)
     pass

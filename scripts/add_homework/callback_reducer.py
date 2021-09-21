@@ -2,7 +2,7 @@ from aiogram import types, Bot
 from resources.strings import strings
 from resources.keyboards import get_user_groups_keyboard, get_group_subjects_switch_keyboard, \
     get_add_homework_types_keyboard
-from resources.calendar import create_calendar, process_calendar_selection
+from resources.keyboards.calendar import create_calendar, process_calendar_selection
 from db import *
 
 
@@ -105,3 +105,4 @@ async def reduce_add_homework_state_callback(state: str, call: types.CallbackQue
         await reduce_add_homework_select_date_state_callback(state, call, user)
     elif state == "add":
         await reduce_add_homework_add_state_callback(call, user)
+    pass

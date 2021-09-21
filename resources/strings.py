@@ -8,10 +8,10 @@ strings = {
     "user_registered":              "Вы уже зарегистрированы",
     "enter_first_name":             "Введите ваше имя",
     "enter_last_name":              "Введите вашу фамилию",
-    "enter_group_code":             "Введите код вашего класса или группы:",
+    "enter_group_code":             "Введите код вашего класса:",
     "enter_user_type":              "Кто вы?",
-    "join_or_create_group":         "Вы хотите создать группу или присоединится к существующей?",
-    "create_group":                 "Создать группу",
+    "join_or_create_group":         "Вы хотите создать группу класса или присоединится к существующей?",
+    "create_group":                 "Создать группу класса",
     "join_group":                   "Присоеденится",
     "incorrect_group_id":           "Немогу найти такую группу..(\nПроверьте все, и введите еще раз:",
     "successful_join_to_group":     "Вы успешно присоеденились к группе '{group_name}'!",
@@ -26,6 +26,9 @@ strings = {
     "enter_subject_description":    "Введите описание предмета:",
     "subject_added_successful":     "Предмет добавлен в группу!",
     "subject_description_added":    "Описание предмета добавлено.",
+    "add_homework":                 "Добавить задание",
+    "add_subject":                  "Добавить предмет",
+    "help_button":                  "Помощь",
     "menu":                         "Меню:\n"
                                     "Добавить домашнее задание - /add_homework\n"
                                     "Создать новую группу - /create_group\n"

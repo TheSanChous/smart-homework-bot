@@ -1,7 +1,7 @@
 from aiogram.types import *
 import datetime
 import calendar
-from .strings import month_names
+from resources.strings import month_names
 
 
 def create_callback_data(state, action,year,month,day):

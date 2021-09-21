@@ -1,5 +1,4 @@
 from resources.strings import text_commands
-from resources.calendar import create_calendar
 from scripts import *
 
 
@@ -94,6 +93,7 @@ async def reduce_message_without_state(message: types.Message, user: Users.UserI
 
 async def reduce_text_message(message: types.Message):
     user = get_user(message.from_user.id)
+    print(user.state)
     if user.state is not None:
         await reduce_message_with_state(message, user)
     else:
